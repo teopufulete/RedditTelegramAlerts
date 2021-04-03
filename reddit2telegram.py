@@ -35,7 +35,8 @@ class RedditAlerts:
         subreddit = reddit.subreddit(subreddit)
     
         for submission in subreddit.search(query, time_filter = 'day'):
-            print(submission.title)
+            post_dict[submission.title] = submission.url
+            print(post_dict)
           
           
 reddit = RedditAlerts(client_id, client_secret, reddit_username, reddit_password)
