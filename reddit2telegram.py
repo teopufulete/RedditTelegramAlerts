@@ -6,7 +6,7 @@ import logging
 with open("./info.txt",'r') as f:
     credentials = f.read().split(',')
 
-client_id, client_secret , reddit_username, reddit_password = [credentials[i] for i in (0,1,2,3)]
+client_id, client_secret , reddit_username, reddit_password, token, chat_id = [credentials[i] for i in (0,1,2,3,4,5)]
 
 
 class RedditAlerts:
@@ -35,13 +35,14 @@ class RedditAlerts:
         subreddit = reddit.subreddit(subreddit)
     
         for submission in subreddit.search(query, time_filter = 'day'):
-            post_dict[submission.title] = submission.url
-            print(post_dict)
+            return(submission.title, submission.url)
+            # post_dict[submission.id] = submission.url, submission.title
+            # print(post_dict)
           
           
 reddit = RedditAlerts(client_id, client_secret, reddit_username, reddit_password)
 reddit.login()
-reddit.search_sub('mechmarket', 'tangerine')
+message = reddit.search_sub('mechmarket', 'tangerine')
 
 
 class TelegramMessages:
@@ -49,3 +50,10 @@ class TelegramMessages:
         self.token = token 
         self.telegram_channel = telegram_channel      
     
+    def send_message(self, text):
+        self.bot = tg.Bot(token = token)
+        bot = self.bot  
+        bot.sendMessage(chat_id = chat_id, text = text)   
+
+telegram = TelegramMessages(token, chat_id)
+telegram.send_message(message)
